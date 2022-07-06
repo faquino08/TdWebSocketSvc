@@ -1,0 +1,251 @@
+07-05 16:51 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 16:54 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 16:57 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 16:58 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:01 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:03 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:03 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:04 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:05 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:08 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:11 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:11 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:15 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:16 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:17 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:24 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:24 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:26 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:26 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.6.47.58:8080 (Press CTRL+C to quit)
+07-05 17:27 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:27 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:28 api          ERROR    Exception on /run [GET]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 137, in login
+    g.browser = loginBrowser(config)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 91, in loginBrowser
+    self.log.info(myurl)
+NameError: name 'self' is not defined
+07-05 17:28 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:28:53] "[35m[1mGET /run HTTP/1.1[0m" 500 -
+07-05 17:29 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:29 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:29 api          ERROR    Exception on /run [GET]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 137, in login
+    g.browser = loginBrowser(config)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 91, in loginBrowser
+    self.log.info(myurl)
+NameError: name 'self' is not defined
+07-05 17:29 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:29:55] "[35m[1mGET /run HTTP/1.1[0m" 500 -
+07-05 17:33 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:33 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:33 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:33 api          ERROR    Exception on /run [GET]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1526, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1545, in finalize_request
+    response = self.make_response(rv)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1701, in make_response
+    raise TypeError(
+TypeError: The view function for 'login' did not return a valid response. The function either returned None or ended without a return statement.
+07-05 17:33 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:33:19] "[35m[1mGET /run HTTP/1.1[0m" 500 -
+07-05 17:37 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:37 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:37 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:37 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:37:51] "GET /run HTTP/1.1" 200 -
+07-05 17:38 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:38:43] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:39 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:39:52] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:42 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:42 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:44 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:44 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:44:20] "GET /run HTTP/1.1" 200 -
+07-05 17:44 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:44:41] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:44 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:44:50] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:45 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:45:16] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:45 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:45:36] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:47 werkzeug     INFO     10.6.47.58 - - [05/Jul/2022 17:47:13] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:48 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:48 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:50 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:50 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:50:45] "GET /run HTTP/1.1" 200 -
+07-05 17:51 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:51:08] "[31m[1mPOST /two-fa HTTP/1.1[0m" 400 -
+07-05 17:51 api          ERROR    Exception on /two-fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 148, in sms_received
+    msg = request.json['Body']
+KeyError: 'Body'
+07-05 17:51 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:51:34] "[35m[1mPOST /two-fa HTTP/1.1[0m" 500 -
+07-05 17:53 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:53 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:53 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:53 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:53:52] "GET /run HTTP/1.1" 200 -
+07-05 17:54 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:54:12] "[33mPOST /two-fa HTTP/1.1[0m" 404 -
+07-05 17:54 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:54:12] "[33mPOST /two-fa/ HTTP/1.1[0m" 404 -
+07-05 17:54 api          ERROR    Exception on /two_fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 148, in sms_received
+    msg = request.json['Body']
+KeyError: 'Body'
+07-05 17:54 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:54:26] "[35m[1mPOST /two_fa HTTP/1.1[0m" 500 -
+07-05 17:55 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:55 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:55 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:55 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:55:53] "GET /run HTTP/1.1" 200 -
+07-05 17:56 api          ERROR    Exception on /two_fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 148, in sms_received
+    msg = request.json['body']
+KeyError: 'body'
+07-05 17:56 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:56:07] "[35m[1mPOST /two_fa HTTP/1.1[0m" 500 -
+07-05 17:56 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:56 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:56 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:56 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:56:57] "GET /run HTTP/1.1" 200 -
+07-05 17:57 api          ERROR    Exception on /two_fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 149, in sms_received
+    header = get_access_token(g.browser,msg)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\ctx.py", line 51, in __getattr__
+    raise AttributeError(name) from None
+AttributeError: browser
+07-05 17:57 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:57:04] "[35m[1mPOST /two_fa HTTP/1.1[0m" 500 -
+07-05 17:57 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 17:57 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-05 17:58 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 17:58 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:58:03] "GET /run HTTP/1.1" 200 -
+07-05 17:58 api          ERROR    Exception on /two_fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 149, in sms_received
+    header = get_access_token(g.browser,msg)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\ctx.py", line 51, in __getattr__
+    raise AttributeError(name) from None
+AttributeError: browser
+07-05 17:58 werkzeug     INFO     10.6.47.15 - - [05/Jul/2022 17:58:20] "[35m[1mPOST /two_fa HTTP/1.1[0m" 500 -
+07-05 18:01 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 23:59 __main__     INFO     https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Ftest&client_id=KOOWEZGOW4WT4S5RFRGCOOLGLZCUCPOA%40AMER.OAUTHAP
+07-05 23:59 apscheduler.scheduler INFO     Adding job tentatively -- it will be properly scheduled when the scheduler starts
+07-05 23:59 werkzeug     INFO      * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.6.47.58:8081 (Press CTRL+C to quit)
+07-06 00:01 urllib3.connectionpool WARNING  Connection pool is full, discarding connection: 127.0.0.1
+07-06 00:01 api          ERROR    Exception on /two_fa [POST]
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\splinter\element_list.py", line 42, in __getitem__
+    return self._container[index]
+IndexError: list index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 154, in sms_received
+    header = get_access_token(cache['browser'],msg)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\StreamingFlaskDocker\api.py", line 34, in get_access_token
+    smscode = browser.find_by_id("smscode0").first.fill(code)
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\splinter\element_list.py", line 57, in first
+    return self[0]
+  File "C:\Users\faqui\Codehub\StreamingFlaskDocker\tdstreaming\lib\site-packages\splinter\element_list.py", line 44, in __getitem__
+    raise ElementDoesNotExist(
+splinter.exceptions.ElementDoesNotExist: no elements could be found with id "smscode0"
+07-06 00:01 werkzeug     INFO     10.6.47.15 - - [06/Jul/2022 00:01:45] "[35m[1mPOST /two_fa HTTP/1.1[0m" 500 -
+07-06 00:03 urllib3.connectionpool WARNING  Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /session/31f80aaf4a0dd3dfc5c2c3aaecf37f53/url
