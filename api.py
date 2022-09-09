@@ -163,6 +163,12 @@ def create_app(kafka_location,debug=False):
         #'text': reminder_text,
         })
 
+    @app.route("/", methods=['GET'])
+    def testApi():
+        return json.dumps({
+        'status':'success'
+        })
+
     def runStreams():
         return tdStreams(kafkaLocation=kafka_location)
     
