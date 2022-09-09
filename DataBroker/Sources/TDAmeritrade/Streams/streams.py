@@ -40,14 +40,14 @@ class streams:
                 format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
                 datefmt="%m-%d %H:%M:%S",
                 handlers=[logging.FileHandler(f'./logs/output_{datetime.date.today()}.txt'), logging.StreamHandler()],
-        )
+            )
         else:
             logging.basicConfig(
                 level=logging.INFO,
                 format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
                 datefmt="%m-%d %H:%M:%S",
                 handlers=[logging.FileHandler(f'./logs/output_{datetime.date.today()}.txt')],
-        )
+            )
 
         if stocks != None:
             self.subscriptions['stocks'] = stocks

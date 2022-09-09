@@ -3,7 +3,7 @@ from DataBroker.Sources.TDAmeritrade.Streams.database import databaseHandler
 import datetime
 from DataBroker.Sources.TDAmeritrade.Streams.streams import streams
 
-def tdStreams(dbHost="10.6.47.45",dbPort="5432",dbName="postgres",dbUser="postgres",dbPass="Mollitiam-0828",headers=None,kafkaLocation='10.6.47.45'):
+def tdStreams(dbHost="10.6.47.45",dbPort="5432",dbName="postgres",dbUser="postgres",dbPass="Mollitiam-0828",headers=None,kafkaLocation='10.6.47.45',debug=False):
     db = databaseHandler({
             "host": dbHost,
             "port": dbPort,
@@ -23,5 +23,5 @@ def tdStreams(dbHost="10.6.47.45",dbPort="5432",dbName="postgres",dbUser="postgr
     #print(len(topVolOptionsStr['result']))
 
     if headers != None:
-        data = streams(header=headers,stocks=list(db.pennyOptionable.index),futures=list(db.futures.array),kafkaAddress=kafkaLocation)
+        data = streams(header=headers,stocks=list(db.pennyOptionable.index),futures=list(db.futures.array),debug=debug,kafkaAddress=kafkaLocation)
     return

@@ -79,12 +79,13 @@ def get_access_token(browser,logger,code=None):
 
 def loginBrowser(config,logger):
     # define the location of the Chrome Driver - YOU MUST CHANGE THE PATH SO IT POINTS TO YOUR CHROMEDRIVER
-    executable_path = 'C:\\Program Files (x86)\\chrome-win\\chrome.exe'
+    executable_path = '/usr/bin/chromium'
     option = Options()
+    option.add_argument("--no-sandbox")
     option.binary_location = executable_path
 
     # Create a new instance of the browser, make sure we can see it (Headless = False)
-    browser = Browser('chrome',executable_path='C:\\Users\\faqui\\Webdriver\\chromedriver.exe',options=option, headless=False)
+    browser = Browser('chrome',options=option, headless=True)
 
     # define the components to build a URL
     method = 'GET'
@@ -156,7 +157,7 @@ def create_app(kafka_location,debug=False):
     def sms_received():
         msg = request.json['code']
         header = get_access_token(cache['browser'],logger,msg)
-        tdStreams(headers=header,kafkaLocation=kafka_location)
+        tdStreams(headers=header,kafkaLocation=kafka_location,debug=debug)
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
@@ -167,5 +168,6 @@ def create_app(kafka_location,debug=False):
     
     return app
 
-app = create_app(kafka_location='10.6.47.45',debug=False)
+debugBool = bool(environ['STREAM_DEBUG'])
+app = create_app(kafka_location='10.6.47.45',debug=debugBool)
 #app.run(host='0.0.0.0',debug=False,port=8081)
