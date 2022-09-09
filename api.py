@@ -168,6 +168,12 @@ def create_app(kafka_location,debug=False):
     
     return app
 
-debugBool = bool(environ['STREAM_DEBUG'])
+def convert(s): 
+    if s == "True" or s =="true" or s == "TRUE": 
+        return True
+    return False
+
+debugBool = convert(environ['STREAM_DEBUG'])
+print(debugBool)
 app = create_app(kafka_location='10.6.47.45',debug=debugBool)
 #app.run(host='0.0.0.0',debug=False,port=8081)
