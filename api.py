@@ -156,7 +156,7 @@ def create_app(kafka_location,debug=False):
     minuteNow = timeNow.minute
     weekdayNow = timeNow.weekday()
     startTime = dataHours[weekdayNow]
-    if hourNow is not None:
+    if startTime is not None:
         if(hourNow >= int(startTime)):
             cache['browser'] = loginBrowser(config,logger=cache['logger'])
         elif(minuteNow >= 55):
