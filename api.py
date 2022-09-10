@@ -13,7 +13,7 @@ from selenium.webdriver.chrome.options import Options
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from flask import Flask, request, g
+from flask import Flask, request, g, session
 from flask_restful import Api
 from flask_apscheduler import APScheduler
 
@@ -23,6 +23,15 @@ from DataBroker.tdstreams import tdStreams
 class Config:
     SCHEDULER_API_ENABLED = True
 
+dataHours = [
+    "7",
+    "7",
+    "7",
+    "7",
+    "7",
+    "None",
+    "18"
+]
 
 def get_access_token(browser,logger,code=None):
     config = configparser.ConfigParser()
@@ -131,7 +140,7 @@ def create_app(kafka_location,debug=False):
             datefmt="%m-%d %H:%M",
             handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt') ],
         )
-    logger = logging.getLogger(__name__)
+    session['logger'] = logging.getLogger(__name__)
     app = Flask(__name__)
     app.config.from_object(Config())
     # initialize scheduler
@@ -140,23 +149,41 @@ def create_app(kafka_location,debug=False):
 
     config = configparser.ConfigParser()
     config.read('config.ini')
-    cache['browser'] = loginBrowser(config,logger=logger)
 
-    '''@scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
-    @app.route("/run", methods=['GET'])
+    timeNow = datetime.datetime.now()
+    hourNow = timeNow.hour()
+    minuteNow = timeNow.minute()
+    weekdayNow = timeNow.weekday()
+    startTime = dataHours[weekdayNow]
+    if(hourNow >= int(startTime)):
+        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+    elif(minuteNow >= 55):
+        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+
+    @scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
     def login():
         config = configparser.ConfigParser()
         config.read('config.ini')
-        cache['browser'] = loginBrowser(config,logger=logger)
+        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
-        })'''
+        })
+
+    @app.route("/run", methods=['GET'])
+    def loginFlow():
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+        return json.dumps({
+        'status':'success',
+        #'text': reminder_text,
+        })
 
     @app.route("/two_fa", methods=['POST'])
     def sms_received():
         msg = request.json['code']
-        header = get_access_token(cache['browser'],logger,msg)
+        header = get_access_token(cache['browser'],session.get("logger",None),msg)
         tdStreams(headers=header,kafkaLocation=kafka_location,debug=debug)
         return json.dumps({
         'status':'success',
