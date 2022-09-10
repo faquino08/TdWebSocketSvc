@@ -151,8 +151,8 @@ def create_app(kafka_location,debug=False):
     config.read('config.ini')
 
     timeNow = datetime.datetime.now()
-    hourNow = timeNow.hour()
-    minuteNow = timeNow.minute()
+    hourNow = timeNow.hour
+    minuteNow = timeNow.minute
     weekdayNow = timeNow.weekday()
     startTime = dataHours[weekdayNow]
     if(hourNow >= int(startTime)):
