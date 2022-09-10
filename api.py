@@ -29,7 +29,7 @@ dataHours = [
     "7",
     "7",
     "7",
-    "None",
+    None,
     "18"
 ]
 
@@ -150,15 +150,17 @@ def create_app(kafka_location,debug=False):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    timeNow = datetime.datetime.now()
+    tzInfo  = datetime.timezone(datetime.timedelta(hours=-4))
+    timeNow = datetime.datetime.now(tz=tzInfo)
     hourNow = timeNow.hour
     minuteNow = timeNow.minute
     weekdayNow = timeNow.weekday()
     startTime = dataHours[weekdayNow]
-    if(hourNow >= int(startTime)):
-        cache['browser'] = loginBrowser(config,logger=cache['logger'])
-    elif(minuteNow >= 55):
-        cache['browser'] = loginBrowser(config,logger=cache['logger'])
+    if hourNow is not None:
+        if(hourNow >= int(startTime)):
+            cache['browser'] = loginBrowser(config,logger=cache['logger'])
+        elif(minuteNow >= 55):
+            cache['browser'] = loginBrowser(config,logger=cache['logger'])
 
     @scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
     def login():
