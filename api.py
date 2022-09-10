@@ -140,7 +140,7 @@ def create_app(kafka_location,debug=False):
             datefmt="%m-%d %H:%M",
             handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt') ],
         )
-    session['logger'] = logging.getLogger(__name__)
+    cache['logger'] = logging.getLogger(__name__)
     app = Flask(__name__)
     app.config.from_object(Config())
     # initialize scheduler
@@ -156,15 +156,15 @@ def create_app(kafka_location,debug=False):
     weekdayNow = timeNow.weekday()
     startTime = dataHours[weekdayNow]
     if(hourNow >= int(startTime)):
-        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+        cache['browser'] = loginBrowser(config,logger=cache['logger'])
     elif(minuteNow >= 55):
-        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+        cache['browser'] = loginBrowser(config,logger=cache['logger'])
 
     @scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
     def login():
         config = configparser.ConfigParser()
         config.read('config.ini')
-        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+        cache['browser'] = loginBrowser(config,logger=cache['logger'])
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
@@ -174,7 +174,7 @@ def create_app(kafka_location,debug=False):
     def loginFlow():
         config = configparser.ConfigParser()
         config.read('config.ini')
-        cache['browser'] = loginBrowser(config,logger=session.get("logger",None))
+        cache['browser'] = loginBrowser(config,logger=cache['logger'])
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
@@ -183,7 +183,7 @@ def create_app(kafka_location,debug=False):
     @app.route("/two_fa", methods=['POST'])
     def sms_received():
         msg = request.json['code']
-        header = get_access_token(cache['browser'],session.get("logger",None),msg)
+        header = get_access_token(cache['browser'],cache['logger'],msg)
         tdStreams(headers=header,kafkaLocation=kafka_location,debug=debug)
         return json.dumps({
         'status':'success',
