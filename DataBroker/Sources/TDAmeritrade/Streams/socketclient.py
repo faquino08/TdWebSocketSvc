@@ -1,6 +1,7 @@
 import websockets
 import asyncio
 import json
+from os import environ
 import pyodbc
 import datetime
 from kafka import KafkaProducer
@@ -41,12 +42,12 @@ class WebSocketClient():
     def database_connect(self):
         
         # define the server and the database, YOU WILL NEED TO CHANGE THIS TO YOUR OWN DATABASE AND SERVER
-        server = '10.6.47.45' 
+        server = environ.get('TIMESCALE_ADDRESS','10.6.47.45')
         port = '5432'
-        database = 'postgres'  
+        database = environ.get('TIMESCALE_DB','postgres')  
         sql_driver = '{PostgreSQL Unicode}'
-        me = 'postgres'
-        pwd = 'Mollitiam-0828'
+        me = environ.get('TIMESCALE_USER','postgres')
+        pwd = environ.get('TIMESCALE_PWD','Mollitiam-0828')
 
         alchemyStr = f"postgresql+psycopg2://{me}:{pwd}@{server}/{database}"
         connAlch = create_engine(alchemyStr).connect()

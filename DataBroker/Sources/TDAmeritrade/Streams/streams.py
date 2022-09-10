@@ -302,7 +302,7 @@ class streams:
 
     def scheduleHours(self,table,aioSched,client,counter,thread_lock):
         est = pytz.timezone('US/Eastern')
-        localTime = datetime.datetime.utcnow()
+        localTime = datetime.datetime.now(tz=est)
         #localTime = localTime.isoformat()
         for index, asset in table.iterrows():
             if asset['td_service_name'] != 'LEVELONE_FUTURES':
