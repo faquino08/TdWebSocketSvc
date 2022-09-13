@@ -157,9 +157,9 @@ def create_app(kafka_location,debug=False):
     weekdayNow = timeNow.weekday()
     startTime = dataHours[weekdayNow]
     if startTime is not None:
-        if(hourNow >= int(startTime)):
+        if(hourNow == int(startTime)):
             cache['browser'] = loginBrowser(config,logger=cache['logger'])
-        elif(minuteNow >= 55):
+        elif(hourNow < int(startTime) and minuteNow >= 55):
             cache['browser'] = loginBrowser(config,logger=cache['logger'])
 
     @scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
