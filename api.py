@@ -13,11 +13,13 @@ from selenium.webdriver.chrome.options import Options
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from flask import Flask, request, g, session
-from flask_restful import Api
-from flask_apscheduler import APScheduler
+from quart import Quart, request, g, session
+#from flask_restful import Api
+#from flask_apscheduler import APScheduler
 
 from DataBroker.tdstreams import tdStreams
+
+from constants import DEBUG, BOOTSTRAP_SERVER
 
 # set configuration values
 class Config:
@@ -86,7 +88,7 @@ def get_access_token(browser,logger,code=None):
         else:
             time.sleep(5)
 
-def loginBrowser(config,logger):
+'''def loginBrowser(config,logger):
     # define the location of the Chrome Driver - YOU MUST CHANGE THE PATH SO IT POINTS TO YOUR CHROMEDRIVER
     executable_path = '/usr/bin/chromium'
     option = Options()
@@ -122,7 +124,50 @@ def loginBrowser(config,logger):
 
     # click the Accept terms button
     browser.find_by_id("accept").first.click() 
-    return browser
+    return browser'''
+
+class loginBrowser():
+    def __init__(self,config,logger):
+        self.config = config
+        self.logger = logger
+
+    def run(self):
+        # define the location of the Chrome Driver - YOU MUST CHANGE THE PATH SO IT POINTS TO YOUR CHROMEDRIVER
+        executable_path = '/usr/bin/chromium'
+        option = Options()
+        option.add_argument("--no-sandbox")
+        option.binary_location = executable_path
+
+        # Create a new instance of the browser, make sure we can see it (Headless = False)
+        self.browser = Browser('chrome',options=option, headless=True)
+
+        # define the components to build a URL
+        method = 'GET'
+        url = 'https://auth.tdameritrade.com/auth?'
+        client_code = self.config['TD']['client_id'] + '@AMER.OAUTHAP'
+        payload = {'response_type':'code', 'redirect_uri':'http://localhost/test', 'client_id':client_code}
+
+        # build the URL and store it in a new variable
+        p = requests.Request(method, url, params=payload).prepare()
+        myurl = p.url
+        self.logger.debug(myurl)
+
+        # go to the URL
+        self.browser.visit(myurl)
+
+        # define items to fillout form
+        payload = {'username': self.config['TD']['account_number'],
+                'password': self.config['TD']['password']}
+
+        time.sleep(1)
+        # fill out each part of the form and click submit
+        username = self.browser.find_by_id("username0").first.fill(payload['username'])
+        password = self.browser.find_by_id("password1").first.fill(payload['password'])
+        submit   = self.browser.find_by_id("accept").first.click()
+
+        # click the Accept terms button
+        self.browser.find_by_id("accept").first.click() 
+        return 
 
 def create_app(kafka_location,debug=False):
     cache = {}
@@ -131,21 +176,21 @@ def create_app(kafka_location,debug=False):
             level=logging.DEBUG,
             format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
             datefmt="%m-%d %H:%M",
-            handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt')],
+            handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt'), logging.StreamHandler()],
         )
     else:
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
             datefmt="%m-%d %H:%M",
-            handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt') ],
+            handlers=[logging.FileHandler(f'./logs/TDStreamFlask_{datetime.date.today()}.txt'), logging.StreamHandler()],
         )
     cache['logger'] = logging.getLogger(__name__)
-    app = Flask(__name__)
+    app = Quart(__name__)
     app.config.from_object(Config())
     # initialize scheduler
-    scheduler = APScheduler()
-    scheduler.init_app(app)
+    #scheduler = APScheduler()
+    #scheduler.init_app(app)
 
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -161,8 +206,9 @@ def create_app(kafka_location,debug=False):
             cache['browser'] = loginBrowser(config,logger=cache['logger'])
         elif(hourNow < int(startTime) and minuteNow >= 55):
             cache['browser'] = loginBrowser(config,logger=cache['logger'])
+    cache['streams'] = tdStreams()
 
-    @scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
+    #@scheduler.task('cron', id='stream', minute='0', hour='6', day_of_week='mon-fri', timezone='America/New_York')
     def login():
         config = configparser.ConfigParser()
         config.read('config.ini')
@@ -170,45 +216,52 @@ def create_app(kafka_location,debug=False):
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
-        })
+        }), cache['browser'].run()
 
     @app.route("/run", methods=['GET'])
-    def loginFlow():
+    async def loginFlow():
         config = configparser.ConfigParser()
         config.read('config.ini')
         cache['browser'] = loginBrowser(config,logger=cache['logger'])
+        app.add_background_task(cache['browser'].run())
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
         })
 
+    @app.route("/stop", methods=['GET'])
+    async def logoutFlow():
+        if cache['streams'].streamHandler == None:
+            return json.dumps({
+                'status':'failed',
+            })
+        else:
+            return json.dumps({
+            'status':'success',
+            #'text': reminder_text,
+            }), cache['streams'].streamHandler.stop()
+
     @app.route("/two_fa", methods=['POST'])
-    def sms_received():
+    async def sms_received():
         msg = request.json['code']
-        header = get_access_token(cache['browser'],cache['logger'],msg)
-        tdStreams(headers=header,kafkaLocation=kafka_location,debug=debug)
+        header = get_access_token(cache['browser'].browser,cache['logger'],msg)
+        app.add_background_task(cache['streams'].run(),args=[header,kafka_location,debug])
         return json.dumps({
         'status':'success',
         #'text': reminder_text,
         })
 
     @app.route("/", methods=['GET'])
-    def testApi():
+    async def testApi():
         return json.dumps({
         'status':'success'
         })
 
     def runStreams():
-        return tdStreams(kafkaLocation=kafka_location)
-    
+        return tdStreams()
+
+    #scheduler.start()
     return app
 
-def convert(s): 
-    if s == "True" or s =="true" or s == "TRUE": 
-        return True
-    return False
-
-debugBool = convert(environ['STREAM_DEBUG'])
-print(debugBool)
-app = create_app(kafka_location='10.6.47.45',debug=debugBool)
+app = create_app(kafka_location=BOOTSTRAP_SERVER,debug=DEBUG)
 #app.run(host='0.0.0.0',debug=False,port=8081)

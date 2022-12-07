@@ -5,7 +5,6 @@ import dateutil.parser
 import datetime
 from aioscheduler import TimedScheduler
 import logging
-#from TdAmeritradeStream import TDAuthentication
 import configparser
 import json
 import time
@@ -24,7 +23,7 @@ nest_asyncio.apply()
 logger = logging.getLogger(__name__)
 
 class streams:
-    def __init__(self,header=None,stocks=None,options=None,futures=None,debug=False,kafkaAddress='10.6.47.45'):
+    def __init__(self,header=None,stocks=None,options=None,futures=None,debug=False,kafkaAddress='10.6.47.45:9092'):
         # we need to go to the User Principals endpoint to get the info we need to make a streaming request
         endpoint = "https://api.tdameritrade.com/v1/userprincipals"
         self.subscriptions = {'stocks': None,'options': None,'futures': None}
@@ -115,13 +114,29 @@ class streams:
 
         self.messages_counter,self.messages_counter_thread_lock = self.scheduleHours(hours,scheduler,self.client,self.messages_counter,self.messages_counter_thread_lock)
 
-        await asyncio.gather(
+        '''await asyncio.gather(
             self.client.sendMessage(login_encoded),
             #self.client.sendMessage(data_encoded),
             self.client.receiveMessage(self.connection),
             self.checkActives()
-        )
+        )'''
 
+        await asyncio.wait_for(self.client.sendMessage(login_encoded),timeout=10)
+        login_response = await asyncio.wait_for(self.connection.recv(), timeout=10)
+        login_response = str(login_response).replace(' \"C\" ','C')
+        login_response_decoded = json.loads(login_response)
+        self.log.debug(login_response_decoded['response'][0].get('command'))
+        self.log.debug(login_response_decoded['response'][0].get('content').get('code'))
+        if login_response_decoded['response'][0].get('command') == 'LOGIN' and login_response_decoded['response'][0].get('content').get('code') == 3:
+            self.log.error("Login Failed")
+            raise Exception("Login Failed")
+        elif login_response_decoded['response'][0].get('command') == 'LOGIN' and login_response_decoded['response'][0].get('content').get('code') == 0:
+            await asyncio.gather(
+                self.client.sendMessage(data_encoded),
+                self.client.receiveMessage(self.connection),
+                self.checkActives()
+            )   
+        
     def initMsg(self,userPrincipalsResponse,counter,lock,asset_type='LEVELONE_FUTURES',assets={'stocks': None,'options': None,'futures': None}):
         # define a request for different data sources
         message_id = self.generate_message_id(counter,lock)
@@ -246,7 +261,7 @@ class streams:
                     }
                 }]}
                 self.subscriptions['futures'] = data_request["requests"][0]["parameters"]["keys"].split(",")
-            self.log.info(self.subscriptions)
+        self.log.info(self.subscriptions)
         # create it into a JSON string, as the API expects a JSON string.
 
         data_encoded = json.dumps(data_request)
@@ -303,17 +318,21 @@ class streams:
     def scheduleHours(self,table,aioSched,client,counter,thread_lock):
         est = pytz.timezone('US/Eastern')
         localTime = datetime.datetime.now(tz=est)
+        uniTime = datetime.datetime.now()
+        offset = uniTime.hour - localTime.hour
         #localTime = localTime.isoformat()
         for index, asset in table.iterrows():
             if asset['td_service_name'] != 'LEVELONE_FUTURES':
                 self.log.info(index)
                 start = asset['td_start']
-                startDateTime = datetime.datetime(year=localTime.year,month=localTime.month,day=localTime.day,hour=start.hour,minute=start.minute,tzinfo=datetime.timezone(datetime.timedelta(hours=-4))).timestamp()
-                startDateTime = datetime.datetime.utcfromtimestamp(startDateTime)
+                startDateTime = datetime.datetime.strptime(f'{uniTime.month}/{uniTime.day}/{uniTime.year} {start.hour}:{start.minute}','%m/%d/%Y %H:%M') + datetime.timedelta(hours=offset)
+                #startDateTime = startDateTime.astimezone(tz=utc)
+                #startDateTime = datetime.datetime.fromtimestamp(startDateTime,tz=est)
 
                 end = asset['td_end']
-                endDateTime = datetime.datetime(year=localTime.year,month=localTime.month,day=localTime.day,hour=end.hour,minute=end.minute,tzinfo=datetime.timezone(datetime.timedelta(hours=-4))).timestamp()
-                endDateTime = datetime.datetime.utcfromtimestamp(endDateTime)
+                endDateTime = datetime.datetime.strptime(f'{uniTime.month}/{uniTime.day}/{uniTime.year} {end.hour}:{end.minute}','%m/%d/%Y %H:%M') + datetime.timedelta(hours=offset)
+                #endDateTime = endDateTime.astimezone(tz=utc)
+                #endDateTime = datetime.datetime.utcfromtimestamp(endDateTime)
 
                 if asset['td_service_name'] == 'QUOTE':
                     key = 'stocks'
@@ -322,13 +341,12 @@ class streams:
                 elif asset['td_service_name'] == 'OPTION':
                     key = 'options'
                 data_encoded, counter, thread_lock = self.initMsg(self.userPrincipalsResponse,counter,thread_lock,asset['td_service_name'], self.subscriptions[key])
-                self.log.info(endDateTime)
-                self.log.info(localTime)
-                if startDateTime > localTime:
+                uniTime = uniTime.now()
+                if startDateTime > uniTime:
                     aioSched.schedule(client.sendMessage(data_encoded),startDateTime)
-                elif localTime < endDateTime:
+                elif startDateTime < uniTime and uniTime < endDateTime:
                     localTime = datetime.datetime.utcnow()
-                    aioSched.schedule(client.sendMessage(data_encoded),localTime + datetime.timedelta(seconds=5))
+                    aioSched.schedule(client.sendMessage(data_encoded),uniTime + datetime.timedelta(seconds=45))
         return counter, thread_lock
 
     def get_access_token(self):
@@ -395,7 +413,8 @@ class streams:
         # build the URL and store it in a new variable
         p = requests.Request(method, url, params=payload).prepare()
         myurl = p.url
-        self.log.info(myurl)
+        self.log.debug("Built URL: \n")
+        self.log.debug(myurl)
 
         # go to the URL
         browser.visit(myurl)
@@ -429,7 +448,7 @@ class streams:
 
     def loginMsg(self,userPrincipalsResponse,credentials,counter,lock):
         # define a request
-        self.log.info("Generating")
+        self.log.info("Generating Login Msg")
         message_id = self.generate_message_id(counter,lock)
         login_request = {"requests": [{
             "service": "ADMIN",
@@ -444,6 +463,19 @@ class streams:
         # create it into a JSON string, as the API expects a JSON string.
         login_encoded = json.dumps(login_request)
         return login_encoded, message_id, lock
+
+    def logoutMsg(self,userPrincipalsResponse,credentials,counter,lock):
+        self.log.info("Generating Logout Msg")
+        message_id = self.generate_message_id(counter,lock)
+        logout_request = {"requests": [{
+            "service": "ADMIN",
+            "requestid": message_id,
+            "command": "LOGOUT",
+            "account": userPrincipalsResponse['accounts'][0]['accountId'],
+            "source": userPrincipalsResponse['streamerInfo']['appId'],
+            "parameters": { }}]}
+        logout_encoded = json.dumps(logout_request)
+        return logout_encoded, message_id, lock
 
     async def checkActives(self):
         self.consumer = kafkaClient(groupid='testing_checkActives1',kafkaAddress=self.kafkaLoc).consumer
@@ -479,3 +511,42 @@ class streams:
 
             except KeyboardInterrupt:
                 break
+
+    async def stop(self):
+        if self.client.connection != None:
+            # we need to get the timestamp in order to make our next request, but it needs to be parsed
+            tokenTimeStamp = self.userPrincipalsResponse['streamerInfo']['tokenTimestamp']
+            date = dateutil.parser.parse(tokenTimeStamp, ignoretz = True)
+            tokenTimeStampAsMs = self.unix_time_millis(date)
+            # we need to define our credentials that we will need to make our stream
+            credentials = {"userid": self.userPrincipalsResponse['accounts'][0]['accountId'],
+                        "token": self.userPrincipalsResponse['streamerInfo']['token'],
+                        "company": self.userPrincipalsResponse['accounts'][0]['company'],
+                        "segment": self.userPrincipalsResponse['accounts'][0]['segment'],
+                        "cddomain": self.userPrincipalsResponse['accounts'][0]['accountCdDomainId'],
+                        "usergroup": self.userPrincipalsResponse['streamerInfo']['userGroup'],
+                        "accesslevel":self.userPrincipalsResponse['streamerInfo']['accessLevel'],
+                        "authorized": "Y",
+                        "timestamp": int(tokenTimeStampAsMs),
+                        "appid": self.userPrincipalsResponse['streamerInfo']['appId'],
+                        "acl": self.userPrincipalsResponse['streamerInfo']['acl'] }
+            logout_encoded, self.messages_counter, self.messages_counter_thread_lock = self.logoutMsg(self.userPrincipalsResponse,credentials,self.messages_counter,self.messages_counter_thread_lock)
+            
+            await asyncio.wait_for(self.client.sendMessage(logout_encoded),timeout=10)
+            logout_response = await asyncio.wait_for(self.connection.recv(), timeout=10)
+            logout_response = str(logout_response).replace(' \"C\" ','C')
+            logout_response_decoded = json.loads(logout_response)
+            self.log.debug(logout_response_decoded['response'][0].get('command'))
+            self.log.debug(logout_response_decoded['response'][0].get('content').get('code'))
+            if logout_response_decoded['response'][0].get('command') == 'LOGOUT' and logout_response_decoded['response'][0].get('content').get('code') != 0:
+                self.log.error("Logout Failed")
+                raise Exception("Logout Failed")
+            else:
+                self.log.info("Logged Out of Td Ameritrade")  
+                await self.client.connection.close()
+                await self.client.connection.wait_closed()
+                self.log.info("Connection Closed")
+        else:
+            self.log.error('No existing connection to close.')
+
+        

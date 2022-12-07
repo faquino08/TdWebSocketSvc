@@ -44,7 +44,7 @@ ENV    LC_ALL en_US.UTF-8
 #RUN    echo "allow_writeable_chroot=YES" >> /etc/vsftpd.conf
 #EXPOSE 21/tcp
 #EXPOSE 22/tcp
-#EXPOSE 8081/tcp
+#EXPOSE 8080/tcp
 #EXPOSE 10091/tcp
 #EXPOSE 10092/tcp
 #EXPOSE 10093/tcp
@@ -55,7 +55,7 @@ ENV    LC_ALL en_US.UTF-8
 #EXPOSE 10098/tcp
 #EXPOSE 10099/tcp
 #EXPOSE 10100/tcp
-EXPOSE 8081/tcp
+EXPOSE 8080/tcp
 RUN    ufw allow in 21/tcp
 RUN    ufw allow in 22/tcp
 RUN    ufw allow in 10090:10100/tcp

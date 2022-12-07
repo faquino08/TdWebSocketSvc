@@ -4,15 +4,15 @@ from confluent_kafka.schema_registry.avro import AvroDeserializer
 from confluent_kafka.serialization import StringDeserializer
 
 class kafkaClient:
-    def __init__(self,topics=['TdActivesByShares','TdActivesByTrades'],groupid='mygroup',kafkaAddress='10.6.47.45'):
+    def __init__(self,topics=['TdActivesByShares','TdActivesByTrades'],groupid='mygroup',kafkaAddress='10.6.47.45:9092'):
         self.topics = topics
-        sr_conf = {'url': f'http://{kafkaAddress}:8081'}
+        sr_conf = {'url': f'http://{kafkaAddress}'}
         schema_registry_client = SchemaRegistryClient(sr_conf)
 
         avro_deserializer = AvroDeserializer(schema_registry_client)
         string_deserializer = StringDeserializer('utf_8')
 
-        consumer_conf = {'bootstrap.servers': f'{kafkaAddress}:9092',
+        consumer_conf = {'bootstrap.servers': f'{kafkaAddress}',
                             'key.deserializer': string_deserializer,
                             'value.deserializer': avro_deserializer,
                             'group.id': groupid,

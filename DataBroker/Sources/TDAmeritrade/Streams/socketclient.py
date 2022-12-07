@@ -12,10 +12,12 @@ import pandas.io.sql as sqlio
 import logging
 import sys
 
+from constants import POSTGRES_LOCATION, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, BOOTSTRAP_SERVER, INGRESS_TOPIC
+
 class WebSocketClient():
     def __init__(self,userPrincipalsResponse,debug=False):
         self.data_holder = []
-        self.file = open('td_ameritrade_data.txt', 'a')
+        #self.file = open('td_ameritrade_data.txt', 'a')
         self.cnxn = None
         self.crsr = None
         self.userPrincipalsResponse = userPrincipalsResponse
@@ -42,29 +44,25 @@ class WebSocketClient():
     def database_connect(self):
         
         # define the server and the database, YOU WILL NEED TO CHANGE THIS TO YOUR OWN DATABASE AND SERVER
-        server = environ.get('TIMESCALE_ADDRESS','10.6.47.45')
-        port = '5432'
-        database = environ.get('TIMESCALE_DB','postgres')  
-        sql_driver = '{PostgreSQL Unicode}'
-        me = environ.get('TIMESCALE_USER','postgres')
-        pwd = environ.get('TIMESCALE_PWD','Mollitiam-0828')
 
-        alchemyStr = f"postgresql+psycopg2://{me}:{pwd}@{server}/{database}"
+        alchemyStr = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_LOCATION}:{POSTGRES_PORT}/{POSTGRES_DB}"
         connAlch = create_engine(alchemyStr).connect()
         hoursSql = "SELECT  * FROM \"DATASERVICEHOURS\";"
         hours = sqlio.read_sql_query(hoursSql,connAlch,index_col="asset_type")
-        self.producer = KafkaProducer(bootstrap_servers=['10.6.47.45:9092'],
+        self.producer = KafkaProducer(bootstrap_servers=[BOOTSTRAP_SERVER],
+                                        api_version=(2, 5, 0),
                                         value_serializer=lambda m: json.dumps(m).encode('ascii'),
                                         retries=3, linger_ms=30000, batch_size=10000000)
         return hours    
 
     def on_send_success(self,record_metadata):
-        self.log.info(record_metadata.topic)
-        self.log.info(record_metadata.partition)
-        self.log.info(record_metadata.offset)
+        self.log.debug("Send Success: \n")
+        self.log.debug(record_metadata.topic)
+        self.log.debug(record_metadata.partition)
+        self.log.debug(record_metadata.offset)
 
-    def on_send_error(excp):
-        log.error('I am an errback', exc_info=excp)
+    def on_send_error(self,excp):
+        self.log.error('I am an errback', exc_info=excp)
         # handle exception
         
     def database_insert(self, query, topic):   
@@ -77,7 +75,7 @@ class WebSocketClient():
 
         print('Data has been successfully inserted into the database.')
         '''
-        self.log.info("Inserting \n" + '-'*20)
+        self.log.debug("Inserting \n" + '-'*20)
         self.producer.send(topic, query)
 
 
@@ -96,7 +94,7 @@ class WebSocketClient():
         # if all goes well, let the user know.
         if self.connection.open:
             self.log.info('TD Ameritrade Connection established. Client correctly connected')
-            return self.connection, self.hours
+            return self.connection, self.hours             
 
     async def sendMessage(self, message):
         '''
@@ -117,17 +115,19 @@ class WebSocketClient():
                 
                 # grab and decode the message
                 data_tuple = ('service', 'timestamp', 'command')
-                message = await connection.recv()
+                message = await asyncio.wait_for(connection.recv(), timeout=10)
                 message = str(message).replace(' \"C\" ','C')
-                self.log.debug(message)                
                 message_decoded = json.loads(message)
-                self.log.debug(message_decoded)
+                if 'data' in message_decoded.keys():
+                    self.log.info(message_decoded['data'][0].get('service'))
+                    self.log.info(message_decoded['data'][0].get('command'))
+        
                 # prepare data for insertion, connect to database
                 futuresQuery = "INSERT INTO public.td_service_data (service, timestamp, command) VALUES (?,?,?);"
                 nasdaqQuery = "INSERT INTO public.td_service_data (service, timestamp, command) VALUES (?,?,?);"
                 
                 # check if the response contains a key called data if so then it contains the info we want to insert.'
-                self.database_insert(message_decoded, 'rawTDdata')
+                self.database_insert(message_decoded, INGRESS_TOPIC)
             except websockets.exceptions.ConnectionClosed:            
                 self.log.info('Connection with server closed')
                 break
