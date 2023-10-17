@@ -4,4 +4,5 @@ from hypercorn.asyncio import serve
 
 from api import app 
 
-asyncio.run(serve(app,Config()))
+config = Config()
+asyncio.run(serve(app,config))
