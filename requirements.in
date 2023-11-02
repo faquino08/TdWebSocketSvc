@@ -1,0 +1,12 @@
+apscheduler
+beautifulsoup4 
+flask
+flask_apscheduler
+flask_restful
+flask_sqlalchemy
+gunicorn
+pandas
+psycopg2
+ratelimiter
+requests
+werkzeug==2.3.7
