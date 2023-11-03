@@ -4,7 +4,7 @@ flask
 flask_apscheduler
 flask_restful
 flask_sqlalchemy
-gunicorn
+hypercorn
 pandas
 psycopg2
 ratelimiter
