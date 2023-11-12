@@ -2,7 +2,7 @@
 
 Flask app that exposes an api for connecting to a websocket for real-time market data from TD Ameritrade.
 
-<div align="center"><a href="https://github.com/faquino08/FinanceDb/blob/main/README.md">Main Repo of Services</a></div>
+[Main Repo](https://github.com/faquino08/FinanceDb/blob/main/README.md)
 
 # Docker Reference
 
