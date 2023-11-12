@@ -1,6 +1,6 @@
 # TdStreams
 
-Flask app that exposes an api for connecting to a websocker for real-time market data.
+Flask app that exposes an api for connecting to a websocket for real-time market data from TD Ameritrade.
 
 # Docker Reference
 
