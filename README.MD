@@ -1,6 +1,6 @@
 # TdStreams
 
-Flask app that creates an ftp server and exposes an api for reading watchlists exported as `.csv` files and inserting the data into the postgres database.
+Flask app that exposes an api for connecting to a websocker for real-time market data.
 
 # Docker Reference
 
