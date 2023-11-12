@@ -130,4 +130,3 @@ dmypy.json
 
 # Jupyter Notebooks
 *.ipynb
-constants.py
