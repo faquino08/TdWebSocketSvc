@@ -1,4 +1,4 @@
-# TdStreams
+# TdWebSocketSvc
 
 Flask app that exposes an api for connecting to a websocket for real-time market data from TD Ameritrade.
 
